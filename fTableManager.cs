@@ -26,5 +26,13 @@ namespace Phan_Mem_Quan_Ly_Quan_Com_Tam
         {
             this.Close();
         }
+
+        private void adminToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fAdmin fAdmin = new fAdmin();
+            this.Hide();
+            fAdmin.ShowDialog();
+            this.Show();
+        }
     }
 }

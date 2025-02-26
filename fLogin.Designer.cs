@@ -77,6 +77,7 @@
             this.txbPassword.Name = "txbPassword";
             this.txbPassword.Size = new System.Drawing.Size(373, 20);
             this.txbPassword.TabIndex = 3;
+            this.txbPassword.UseSystemPasswordChar = true;
             // 
             // txbUsername
             // 
@@ -105,6 +106,7 @@
             // 
             // fLogin
             // 
+            this.AcceptButton = this.btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(501, 144);

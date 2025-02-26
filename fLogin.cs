@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phan_Mem_Quan_Ly_Quan_Com_Tam.DAO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,10 +35,25 @@ namespace Phan_Mem_Quan_Ly_Quan_Com_Tam
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            fTableManager fTableManager = new fTableManager();
-            fTableManager.ShowDialog();
-            this.Show();
+            string username = txbUsername.Text;
+            string password = txbPassword.Text;
+
+            if(Login(username, password))
+            {
+                this.Hide();
+                fTableManager fTableManager = new fTableManager();
+                fTableManager.ShowDialog();
+                this.Show();
+            }
+            else
+            {
+                MessageBox.Show("Đăng nhập thất bại");
+            }
+        }
+
+        private bool Login(string username, string password)
+        {
+            return AccountDAO.Instance.Login(username, password);
         }
     }
 }
