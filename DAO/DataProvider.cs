@@ -24,55 +24,62 @@ namespace Phan_Mem_Quan_Ly_Quan_Com_Tam.DAO
         private DataProvider() { }
 
         string strConnection = @"Data Source=.\SQLEXPRESS;Initial Catalog=quanlyquancom_db;Integrated Security=True";
-        public DataTable ExcuteQuery(string query, Dictionary<string, object> parameters = null)
+        public DataTable ExcuteQuery(string query, Dictionary<string, object> paramaters = null)
         {
-            SqlConnection sqlConnection = new SqlConnection(strConnection);
-            sqlConnection.Open();
-
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-            
-            if(parameters != null)
+            using(SqlConnection sqlConnection = new SqlConnection(strConnection))
             {
-                foreach(var param in parameters)
+                using(SqlCommand sqlCommand = new SqlCommand(query, sqlConnection))
                 {
-                    sqlCommand.Parameters.AddWithValue(param.Key, param.Value);
+                    if (paramaters != null)
+                    {
+                        foreach (var param in paramaters)
+                        {
+                            sqlCommand.Parameters.AddWithValue(param.Key, param.Value);
+                        }
+                    }
+                        DataTable dataTable = new DataTable();
+                        using(SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand))
+                        {
+                            sqlDataAdapter.Fill(dataTable);
+                        }
+
+                        return dataTable;
+                    
                 }
             }
-            DataTable dataTable = new DataTable();
-
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-            sqlDataAdapter.Fill(dataTable);
-            sqlConnection.Close();
-
-            return dataTable;
         }
 
         public int ExcuteNonQuery(string query)
         {
             int rowsAffected = 0;
-            SqlConnection sqlConnection = new SqlConnection(strConnection);
-            sqlConnection.Open();
+            using (SqlConnection sqlConnection = new SqlConnection(strConnection))
+            {
+                sqlConnection.Open();
 
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                using (SqlCommand sqlCommand = new SqlCommand(query, sqlConnection))
+                {
+                    rowsAffected = sqlCommand.ExecuteNonQuery();
+                }
 
-            rowsAffected = sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
-            return rowsAffected;
+                return rowsAffected;
+            }
         }
 
         public object ExcuteScalar(string query)
         {
             object data = 0;
-            SqlConnection sqlConnection = new SqlConnection(strConnection);
-            sqlConnection.Open();
 
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            using (SqlConnection sqlConnection = new SqlConnection(strConnection))
+            {
+                sqlConnection.Open();
 
-            data = sqlCommand.ExecuteScalar();
-            sqlConnection.Close();
-
-            return data;
+                using (SqlCommand sqlCommand = new SqlCommand(query, sqlConnection))
+                {
+                    data = sqlCommand.ExecuteScalar();
+                }
+                return data;
+            }
+               
         }
     }
 }

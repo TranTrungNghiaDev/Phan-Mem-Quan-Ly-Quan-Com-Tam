@@ -24,10 +24,14 @@ namespace Phan_Mem_Quan_Ly_Quan_Com_Tam.DAO
     
         private AccountDAO() { }
 
-        public bool Login(string username,string password)
+        public bool Login(string username, string password)
         {
-            string query = $"EXEC USP_GetAccountByUsernameAndPassword @username = {username}, @password = {password}";
-            DataTable dataTable = DataProvider.Instance.ExcuteQuery(query);
+            string query = @"EXEC USP_GetAccountByUsernameAndPassword @username , @password ";
+            DataTable dataTable = DataProvider.Instance.ExcuteQuery(query, new Dictionary<string, object>
+            {
+                {"@username", username},
+                {"@password", password }
+            });
 
             if(dataTable.Rows.Count > 0)
             {
@@ -38,6 +42,7 @@ namespace Phan_Mem_Quan_Ly_Quan_Com_Tam.DAO
             {
                 return false;
             }
-         }
+        }
+
     }
 }
